@@ -1,0 +1,4 @@
+make
+./hfpage > hehe
+vimdiff hehe sample_output
+
