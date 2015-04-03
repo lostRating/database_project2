@@ -1,0 +1,4 @@
+make clean
+make
+./btree > out
+vim out

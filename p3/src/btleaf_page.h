@@ -59,9 +59,24 @@ class BTLeafPage : public SortedPage {
 			return insertRecord(key_type, (char*)&addr, length, rid);
 		}
 
-		Status deleteRec(const void *key, AttrType key_type, RID& curRid)
+		Status deleteRec(const void *key, AttrType key_type)
 		{
-			//to be done
+			RID itr, tmp;
+			Keytype itrkey;
+			Status ret = get_first(itr, &itrkey, tmp);
+			if (ret == NOMORERECS) return DONE;
+			if (ret != OK) return ret;
+			while (1)
+			{
+				if (keyCompare(key, &itrkey, key_type) == 0)
+				{
+					assert(deleteRecord(itr) == OK);
+					return OK;
+				}
+				ret = get_next(itr, &itrkey, tmp);
+				if (ret == NOMORERECS) return DONE;
+				if (ret != OK) return ret;
+			}
 			return OK;
 		}
 
@@ -112,14 +127,14 @@ class BTLeafPage : public SortedPage {
 		Status get_data_rid(void *key, AttrType attrtype, RID & dataRid)
 		{
 			RID itr;
-			void* itrkey;
-			Status ret = get_first(itr, itrkey, dataRid);
+			Keytype itrkey;
+			Status ret = get_first(itr, &itrkey, dataRid);
 			if (ret == NOMORERECS) return DONE;
 			if (ret != OK) return ret;
 			while (1)
 			{
-				if (keyCompare(key, itrkey, attrtype) == 0) return OK;
-				ret = get_next(itr, itrkey, dataRid);
+				if (keyCompare(key, &itrkey, attrtype) == 0) return OK;
+				ret = get_next(itr, &itrkey, dataRid);
 				if (ret == NOMORERECS) return DONE;
 				if (ret != OK) return ret;
 			}

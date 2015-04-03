@@ -71,6 +71,7 @@ void BTreeTest::test_scan(IndexFileScan* scan)
 
 	status = OK;
 	size = scan->keysize();
+
 	char* temp = new char[size];
 
 	while (status == OK) {
@@ -671,9 +672,9 @@ cout << " key " << values[i].key
     cout << "\n------ End of delete ------" << endl;
 
     delete btf;
-
+	
     btf = new BTreeFile(status, "BTreeIndex");
-  
+
     // test scan and delete_current()
     cout << "\n\n------ Testing scans ------" << endl;
     lokey = 570;
@@ -711,7 +712,7 @@ cout << " key " << values[i].key
     cout << "\n\n------Start MinRangeScan with lokey = "<<lokey<<"------\n";
     test_scan(scan);
     delete scan;   
-
+	
     cout << "\n------End of MinRangeScan with lokey = "<<lokey<<"------\n";
     
     //ExactMatch
@@ -721,7 +722,6 @@ cout << " key " << values[i].key
     delete scan;
     cout << "\n------End of ExactMatch with key = " <<hikey <<"-------\n";
 
-   
     //MinMaxRangeScan with delete_current()
     scan = btf->new_scan(&lokey, &hikey);
     cout << "\n\n------Start MinMaxRangeScan with lokey = "<<lokey   \

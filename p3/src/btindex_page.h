@@ -62,28 +62,29 @@ class BTIndexPage : public SortedPage {
 		Status get_page_no(const void *key, AttrType key_type, PageId & pageNo)
 		{
 			RID itr;
-			void* itrKey;
-			Status ret = get_first(itr, itrKey, pageNo);
-			if (ret == NOMORERECS)
+			Keytype itrKey;
+			Status ret = get_first(itr, &itrKey, pageNo);
+			assert(ret == OK);
+			/*if (ret == NOMORERECS)
 			{
 				pageNo = getLeftLink();
 				return OK;
 			}
-			if (ret != OK) return ret;
-			if (keyCompare(key, itrKey, key_type) < 0)
+			if (ret != OK) return ret;*/
+			if (keyCompare(key, &itrKey, key_type) < 0)
 			{
 				pageNo = getLeftLink();
 				return OK;
 			}
 			for (PageId last = pageNo; ; last = pageNo)
 			{
-				ret = get_next(itr, itrKey, pageNo);
+				ret = get_next(itr, &itrKey, pageNo);
 				if (ret == NOMORERECS)
 				{
 					pageNo = last;
 					return OK;
 				}
-				if (keyCompare(key, itrKey, key_type) < 0)
+				if (keyCompare(key, &itrKey, key_type) < 0)
 				{
 					pageNo = last;
 					return OK;
@@ -121,7 +122,7 @@ class BTIndexPage : public SortedPage {
 			if ((ret = nextRecord(rid, rid)) != OK) return NOMORERECS;
 			KeyDataEntry addr;
 			int length;
-			if ((ret =getRecord(rid, (char*)&addr, length)) != OK) return ret;
+			if ((ret = getRecord(rid, (char*)&addr, length)) != OK) return ret;
 			Datatype tmp;
 			get_key_data(key, &tmp, &addr, length, INDEX);
 			pageNo = tmp.pageNo;
