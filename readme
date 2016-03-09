@@ -2,4 +2,9 @@ This is a project of Database course
 
 ------------------------------------------
 
-Implement heap file page(p1/src/hfpage), buffer manager(p2/src/buf), btree(p3/src/btfile), external sorting(p4/src/sort) and btree iterator(p4/src/scan)
+Implement
+heap file page(p1/src/hfpage)
+buffer manager(p2/src/buf)
+btree(p3/src/btfile)
+external sorting(p4/src/sort)
+btree iterator(p4/src/scan)
